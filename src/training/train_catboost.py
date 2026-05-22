@@ -5,33 +5,33 @@ import time
 from catboost import CatBoostRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-# ================================
+
 # 1. LOAD DATA (STRICT RULE)
-# ================================
-print("📥 Loading feature dataset...")
+
+print(" Loading feature dataset...")
 
 df = pd.read_csv("data/processed/train_features.csv")
 
-# ================================
+
 # 2. BASIC CLEANING
-# ================================
-print("🧹 Cleaning data...")
+
+print(" Cleaning data...")
 
 # Drop Date (NOT needed for model)
 if "Date" in df.columns:
     df = df.drop("Date", axis=1)
 
-# ================================
+
 # 3. SORT FOR TIME SERIES
-# ================================
-print("🔄 Sorting data...")
+
+print(" Sorting data...")
 
 df = df.sort_values(by=df.columns[0])  # already sorted earlier, safe step
 
-# ================================
+
 # 4. SPLIT (TIME SERIES)
-# ================================
-print("✂️ Splitting data...")
+
+print(" Splitting data...")
 
 X = df.drop("Sales", axis=1)
 y = df["Sales"]
@@ -43,20 +43,20 @@ X_test = X.iloc[split:]
 
 y_train = y.iloc[:split]
 y_test = y.iloc[split:]
-# ================================
+
 # 5. HANDLE CATEGORICAL FEATURES
-# ================================
-print("🧠 Detecting categorical features...")
+
+print(" Detecting categorical features...")
 
 cat_features = X.select_dtypes(include=["object"]).columns.tolist()
 
 print("Categorical columns:", cat_features)
 
 
-# ================================
+
 # 6. MODEL TRAINING
-# ================================
-print("🚀 Training CatBoost...")
+
+print(" Training CatBoost...")
 
 start_time = time.time()
 
@@ -71,26 +71,26 @@ model = CatBoostRegressor(
 model.fit(X_train, y_train, cat_features=cat_features)
 
 end_time = time.time()
-# ================================
+
 # 7. PREDICTIONS
-# ================================
-print("📊 Predicting...")
+
+print(" Predicting...")
 
 y_pred = model.predict(X_test)
 
-# ================================
+
 # 8. METRICS
-# ================================
-print("📏 Calculating metrics...")
+
+print(" Calculating metrics...")
 
 rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 mae = mean_absolute_error(y_test, y_pred)
 mape = np.mean(np.abs((y_test - y_pred) / y_test)) * 100
 
-# ================================
+
 # 9. RESULTS
-# ================================
-print("\n📊 CATBOOST RESULTS")
+
+print("\n CATBOOST RESULTS")
 print(f"RMSE : {rmse:.2f}")
 print(f"MAE  : {mae:.2f}")
 print(f"MAPE : {mape:.2f}%")
@@ -108,4 +108,4 @@ save_results(
     mape=mape,
     time_taken=end_time - start_time
 )
-print("💾 Saving results...")
+print(" Saving results...")

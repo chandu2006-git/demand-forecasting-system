@@ -52,32 +52,32 @@ def encode_categorical(df):
 
 
 def preprocess():
-    print("📥 Loading data...")
+    print(" Loading data...")
     train, store, test = load_all_data()
 
-    print("🔗 Merging datasets...")
+    print(" Merging datasets...")
     train, test = merge_data(train, test, store)
 
-    print("🧹 Handling missing values...")
+    print(" Handling missing values...")
     train = handle_missing_values(train)
     test = handle_missing_values(test)
 
-    print("📅 Creating date features...")
+    print(" Creating date features...")
     train = create_date_features(train)
     test = create_date_features(test)
 
-    print("🧽 Cleaning training data...")
+    print(" Cleaning training data...")
     train = clean_data(train)
 
-    print("🔢 Encoding categorical features...")
+    print(" Encoding categorical features...")
     train = encode_categorical(train)
     test = encode_categorical(test)
 
-    print("💾 Saving processed data...")
+    print(" Saving processed data...")
     train.to_csv("data/processed/final_train.csv", index=False)
     test.to_csv("data/processed/final_test.csv", index=False)
 
-    print("✅ Preprocessing completed successfully!")
+    print(" Preprocessing completed successfully!")
 
 
 if __name__ == "__main__":
