@@ -8,9 +8,14 @@ import joblib
 
 st.set_page_config(page_title="Demand Forecast", layout="wide")
 st.title(" Advanced Demand Forecasting System")
+# ------------------
+# LOAD MODEL FUNCTION
+# ------------------
+@st.cache_resource
+def load_model():
+    return joblib.load("outputs/models/xgboost_model.pkl")
 
-
-# LOAD MODEL & DATA
+# LOAD DATA
 @st.cache_data
 def load_data():
     try:
