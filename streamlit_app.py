@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-
+import gdown
+import os
 
 # PAGE CONFIG
 
@@ -16,16 +17,19 @@ def load_model():
     return joblib.load("outputs/models/xgboost_model.pkl")
 
 # LOAD DATA
+
 @st.cache_data
 def load_data():
-    try:
-        # 🔥 Load full dataset from Google Drive
-        df = pd.read_csv("https://drive.google.com/uc?id=1JKmnQRiBCnJ4jP0i6-qMAYTyrh35WGar")
-        st.success("✅ Loaded full dataset from cloud")
-    except:
-        # fallback
-        df = pd.read_csv("data/sample_data.csv", encoding='latin1')
-        st.warning("⚠️ Using sample data (cloud load failed)")
+    file_id = "1JKmnQRiBCnJ4jP0i6-qMAYTyrh35WGar"
+    url = f"https://drive.google.com/uc?id={file_id}"
+
+    output = "data/full_data.csv"
+
+    # Download only if not exists
+    if not os.path.exists(output):
+        gdown.download(url, output, quiet=False)
+
+    df = pd.read_csv(output)
 
     # Clean columns
     df.columns = df.columns.str.strip().str.lower().str.replace("ï»¿", "")
