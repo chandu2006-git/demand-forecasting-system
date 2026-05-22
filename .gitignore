@@ -1,0 +1,25 @@
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Dataset (large files)
+data/Rossmann Store Sales Dataset/
+data/processed/
+
+# But keep selected important files
+!outputs/plots/xgboost_actual_vs_pred.png
+!outputs/plots/xgboost_error.png
+!outputs/predictions/future_predictions.csv
+!outputs/metrics/model_metrics.csv
+
+# Experiment logs
+catboost_info/
+experiments/
+
+# OS files
+.DS_Store
+Thumbs.db
+
