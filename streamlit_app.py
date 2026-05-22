@@ -11,24 +11,26 @@ st.title(" Advanced Demand Forecasting System")
 
 
 # LOAD MODEL & DATA
-
-@st.cache_resource
-def load_model():
-    return joblib.load("outputs/models/xgboost_model.pkl")
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/sample_data.csv", encoding='latin1')
+    try:
+        # 🔥 Load full dataset from Google Drive
+        df = pd.read_csv("https://drive.google.com/uc?id=1JKmnQRiBCnJ4jP0i6-qMAYTyrh35WGar")
+        st.success("✅ Loaded full dataset from cloud")
+    except:
+        # fallback
+        df = pd.read_csv("data/sample_data.csv", encoding='latin1')
+        st.warning("⚠️ Using sample data (cloud load failed)")
 
-    #  Normalize column names
+    # Clean columns
     df.columns = df.columns.str.strip().str.lower().str.replace("ï»¿", "")
-    # Rename properly
+
     df = df.rename(columns={
         "store": "Store",
         "sales": "Sales",
         "date": "Date"
     })
 
-    # Date fix
     df["Date"] = pd.to_datetime(df["Date"], errors='coerce')
     df = df.dropna(subset=["Date"])
 
@@ -109,12 +111,15 @@ if predict_btn:
             st.stop()
 
         store_data = df[df["Store"] == store]
+
+        #  If store has very less data → fallback to global data
+        if len(store_data) < 7:
+           
+
+            # Use full dataset as fallback
+            store_data = df.copy()
         if len(store_data) < 30:
             st.warning(" Limited data — predictions may be less accurate")
-       
-        # ✅ NEW LOGIC
-        if len(store_data) < 7:
-            st.error(" Not enough data (minimum 7 days required)")
 
         else:
             last_sales = list(store_data["Sales"].tail(30).values)
