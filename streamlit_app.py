@@ -19,7 +19,8 @@ def load_model():
 @st.cache_data
 def load_data():
     df = pd.read_csv("data/sample_data.csv", encoding='latin1')
-    df["Date"] = pd.to_datetime(df["Date"])
+    df["Date"] = pd.to_datetime(df["Date"], errors='coerce')
+    df = df.dropna(subset=["Date"])
     return df.sort_values("Date")
 
 model = load_model()
