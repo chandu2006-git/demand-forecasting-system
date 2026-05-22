@@ -20,8 +20,7 @@ def load_data():
     df = pd.read_csv("data/sample_data.csv", encoding='latin1')
 
     # 🔥 Normalize column names
-    df.columns = df.columns.str.strip().str.lower()
-
+    df.columns = df.columns.str.strip().str.lower().str.replace("ï»¿", "")
     # Rename properly
     df = df.rename(columns={
         "store": "Store",
