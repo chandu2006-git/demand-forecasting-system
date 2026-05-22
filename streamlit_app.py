@@ -18,7 +18,7 @@ def load_model():
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/processed/train_features.csv")
+    df = pd.read_csv("data/sample_data.csv")
     df["Date"] = pd.to_datetime(df["Date"])
     return df.sort_values("Date")
 
