@@ -19,8 +19,17 @@ def load_model():
 @st.cache_data
 def load_data():
     df = pd.read_csv("data/sample_data.csv", encoding='latin1')
+
+    # 🔥 FIX 1: Clean column names
+    df.columns = df.columns.str.strip()
+
+    # 🔥 FIX 2: Normalize column names (important)
+    df.columns = df.columns.str.capitalize()
+
+    # 🔥 FIX 3: Safe Date parsing
     df["Date"] = pd.to_datetime(df["Date"], errors='coerce')
     df = df.dropna(subset=["Date"])
+
     return df.sort_values("Date")
 
 model = load_model()
@@ -56,7 +65,7 @@ def generate_insights(df, promo, holidays):
         insights.append("🏖️ Holidays may influence customer behavior.")
 
     # Weekend pattern
-    weekend_days = df["Date"].apply(lambda x: pd.to_datetime(x).weekday() >= 5)
+    weekend_days = df["Date"].apply(lambda x: x.weekday() >= 5)
     if weekend_days.sum() > 0:
         insights.append("🗓️ Weekend sales variation expected.")
 
@@ -91,6 +100,11 @@ if predict_btn:
 
         future_dates = pd.date_range(start=start_date, end=end_date)
         days = len(future_dates)
+
+        # 🔥 FIX 4: Safe column access
+        if "Store" not in df.columns:
+            st.error("❌ 'Store' column not found in dataset")
+            st.stop()
 
         store_data = df[df["Store"] == store]
 
