@@ -15,18 +15,21 @@ st.title("📊 Advanced Demand Forecasting System")
 @st.cache_resource
 def load_model():
     return joblib.load("outputs/models/xgboost_model.pkl")
-
 @st.cache_data
 def load_data():
     df = pd.read_csv("data/sample_data.csv", encoding='latin1')
 
-    # 🔥 FIX 1: Clean column names
-    df.columns = df.columns.str.strip()
+    # 🔥 Normalize column names
+    df.columns = df.columns.str.strip().str.lower()
 
-    # 🔥 FIX 2: Normalize column names (important)
-    df.columns = df.columns.str.capitalize()
+    # Rename properly
+    df = df.rename(columns={
+        "store": "Store",
+        "sales": "Sales",
+        "date": "Date"
+    })
 
-    # 🔥 FIX 3: Safe Date parsing
+    # Date fix
     df["Date"] = pd.to_datetime(df["Date"], errors='coerce')
     df = df.dropna(subset=["Date"])
 
@@ -35,6 +38,7 @@ def load_data():
 model = load_model()
 df = load_data()
 
+st.write("Columns in dataset:", df.columns)
 # ================================
 # INTELLIGENCE LAYER
 # ================================
