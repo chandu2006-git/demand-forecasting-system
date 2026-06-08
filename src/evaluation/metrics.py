@@ -12,9 +12,9 @@ def save_results(model_name, model, y_test, y_pred, rmse, mae, mape, time_taken)
     os.makedirs("outputs/plots", exist_ok=True)
     os.makedirs("outputs/models", exist_ok=True)
 
-    # ========================
+   
     # 1. SAVE METRICS
-    # ========================
+  
     metrics_df = pd.DataFrame([{
         "Model": model_name,
         "RMSE": rmse,
@@ -30,9 +30,8 @@ def save_results(model_name, model, y_test, y_pred, rmse, mae, mape, time_taken)
     else:
         metrics_df.to_csv(file_path, mode='a', header=False, index=False)
 
-    # ========================
     # 2. SAVE PREDICTIONS
-    # ========================
+
     pred_df = pd.DataFrame({
         "Actual": y_test.values,
         "Predicted": y_pred
@@ -40,14 +39,12 @@ def save_results(model_name, model, y_test, y_pred, rmse, mae, mape, time_taken)
 
     pred_df.to_csv(f"outputs/predictions/{model_name.lower()}_preds.csv", index=False)
 
-    # ========================
     # 3. SAVE MODEL
-    # ========================
+
     joblib.dump(model, f"outputs/models/{model_name.lower()}_model.pkl")
 
-    # ========================
     # 4. PLOTS
-    # ========================
+
     # Actual vs Predicted
     plt.figure()
     plt.plot(y_test.values[:200], label="Actual")
