@@ -8,7 +8,7 @@ __pycache__/
 # Dataset (large files)
 data/Rossmann Store Sales Dataset/
 data/processed/
-
+data/full_data.csv
 # But keep selected important files
 !outputs/plots/xgboost_actual_vs_pred.png
 !outputs/plots/xgboost_error.png

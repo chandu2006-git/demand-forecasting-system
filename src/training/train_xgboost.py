@@ -19,8 +19,6 @@ METRIC_PATH = "outputs/metrics/xgb_metrics.txt"
 # LOAD DATA
 print(" Loading data...")
 df = pd.read_csv(DATA_PATH)
-
-
 # PREPROCESS
 
 print(" Sorting by Date...")

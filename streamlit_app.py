@@ -48,8 +48,6 @@ def load_data():
 model = load_model()
 df = load_data()
 
-st.write("Columns in dataset:", df.columns)
-
 # INTELLIGENCE LAYER
 
 def generate_insights(df, promo, holidays):
